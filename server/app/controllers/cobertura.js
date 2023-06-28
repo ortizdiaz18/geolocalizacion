@@ -1,53 +1,58 @@
 const fs = require("fs");
-const KmlParser = require("kml-parser");
+const { parseString } = require("xml2js");
+const path = require('path');
 
 const validarCobertura = async (req, res) => {
-  const { longitud, latitud } = req.params;
-  //Extrae coordenadas desde archivo kml
-  const gKmlPath = "./Prueba 1.kml";
-  const kmlData = fs.readFileSync(gKmlPath, "utf8");
-  const kmlParser = new KmlParser();
-  const kmlJson = kmlParser.toJson(kmlData);
-
-  // Array para almacenar las coordenadas
+  const { longitud, latitud } = req.query;
   const coordinatesArray = [];
+  // Ruta del archivo KML
+  const kmlPath = path.join(__dirname,"Prueba 1.kml");
 
-  kmlJson.kml.Document.Placemark.forEach((placemark) => {
-    const name = placemark.name;
+  // Leer el archivo KML
+  const kmlData = fs.readFileSync(kmlPath, "utf8");
 
-    // Verificar si el elemento tiene coordenadas
-    if (placemark.Point && placemark.Point.coordinates) {
-      const coordinateString = placemark.Point.coordinates;
-      const coordinateArray = coordinateString.split(',');
-
-      // Obtener las coordenadas
-      const longitude = parseFloat(coordinateArray[0]);
-      const latitude = parseFloat(coordinateArray[1]);
-
-      coordinatesArray.push({ longitude, latitude });
+  // Parsear el archivo KML
+  parseString(kmlData, (err, result) => {
+    if (err) {
+      console.error("Error al parsear el archivo KML:", err);
+      return;
     }
+
+    // Obtener las coordenadas
+
+    const placemarks = result.kml.Document[0].Folder[0].Placemark;
+
+    placemarks.forEach((placemark) => {
+      const coordinates = placemark.Point[0].coordinates[0];
+      const [longitude, latitude] = coordinates.split(",");
+
+      coordinatesArray.push({
+        lat: parseFloat(latitude),
+        lng: parseFloat(longitude),
+      });
+    });
+
+    console.log(coordinatesArray);
   });
 
   function initMap() {
     // Carga el archivo KML
-   
-      const ubicacionActual = {
-        lat: latitud,
-        lng: longitud,
-      };
-      console.log(ubicacionActual);
-      if (verificarRangoUbicacion(ubicacionActual, coordinatesArray)) {
-        res
-          .status(200)
-          .json({ code: "1", msg: "La ubicación actual tiene cobertura" });
-      } else {
-        res
-          .status(400)
-          .json({ code: "0", msg: "La ubicación actual NO tiene cobertura" });
-      }
-   
-  }
 
+    const ubicacionActual = {
+      lat: parseFloat(latitud),
+      lng: parseFloat(longitud),
+    };
+    console.log(ubicacionActual);
+    if (verificarRangoUbicacion(ubicacionActual, coordinatesArray)) {
+      res
+        .status(200)
+        .json({ code: "1", msg: "La ubicación actual tiene cobertura" });
+    } else {
+      res
+        .status(400)
+        .json({ code: "0", msg: "La ubicación actual NO tiene cobertura" });
+    }
+  }
 
   // Función para verificar si una ubicación está dentro del rango
   function verificarRangoUbicacion(ubicacionActual, ubicacionesMapa) {
