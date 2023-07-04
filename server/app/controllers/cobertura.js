@@ -32,7 +32,7 @@ const validarCobertura = async (req, res) => {
       });
     });
 
-    console.log(coordinatesArray);
+    // console.log(coordinatesArray);
   });
 
   function initMap() {
@@ -42,7 +42,7 @@ const validarCobertura = async (req, res) => {
       lat: parseFloat(latitud),
       lng: parseFloat(longitud),
     };
-    console.log(ubicacionActual);
+    // console.log(ubicacionActual);
     if (verificarRangoUbicacion(ubicacionActual, coordinatesArray)) {
       res
         .status(200)

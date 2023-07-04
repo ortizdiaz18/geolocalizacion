@@ -2,6 +2,8 @@ import "./styles/map.css";
 import React, { useEffect, useState } from "react";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 import image from "./assets/logobitwan.webp";
+import Swal from 'sweetalert2'
+
 const App = () => {
   const [longitud, setLongitud] = useState(0);
   const [latitud, setLatitud] = useState(0);
@@ -38,7 +40,22 @@ const App = () => {
   }, []);
 
   useEffect(()=>{
-    console.log(coordinates);
+    if(coordinates.code== 1){
+      Swal.fire({
+        icon: 'success',
+        title: 'Wow...',
+        text: 'En tu direccion tenemos cobertura!',
+        footer: '<a href="https://wa.me/573176995294?text=Contratar%20servicio">Quieres contratar el servicio?</a>'
+      })
+    }else if(coordinates.code == 0){
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'En este momento no tenemos cobertura en tu sector',
+        footer: '<a href="https://wa.me/573176995294?text=Asesor">Quieres hablar con un asesor?</a>'
+      })
+    }
+    console.log("cobertura:"+coordinates.code);
   },[coordinates])
 
   const validaCobertura = () => {
