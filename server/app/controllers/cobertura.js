@@ -6,7 +6,7 @@ const validarCobertura = async (req, res) => {
   const { longitud, latitud } = req.query;
   const coordinatesArray = [];
   // Ruta del archivo KML
-  const kmlPath = path.join(__dirname,"Prueba 1.kml");
+  const kmlPath = path.join(__dirname,"COBERTURA.kml");
 
   // Leer el archivo KML
   const kmlData = fs.readFileSync(kmlPath, "utf8");
