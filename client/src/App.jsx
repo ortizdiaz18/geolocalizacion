@@ -63,7 +63,7 @@ const App = () => {
       const fetchData = async () => {
         try {
           const response = await fetch(
-            `http://localhost:3000/api/v1/cobertura?latitud=${latitud}&longitud=${longitud}`
+            `https://open-rat-production.up.railway.app/api/v1/cobertura?latitud=${latitud}&longitud=${longitud}`
           );
           const data = await response.json();
           setCoordinates(data);
