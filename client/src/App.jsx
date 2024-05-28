@@ -1,17 +1,71 @@
 import "./styles/map.css";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 import image from "./assets/logobitwan.webp";
-import Swal from 'sweetalert2'
+import encabezado from "./assets/encabezado.webp";
+import antena from "./assets/antena.png";
+import ubicacion from "./assets/ubicacion.png";
+import Swal from "sweetalert2";
+import { Route, Routes, useNavigate, Navigate, Outlet } from "react-router-dom";
 
-const App = () => {
+const ProtectedRoute = ({ isActive }) => {
+  if (isActive) {
+    // Renderizar el contenido de la página de aterrizaje si está autenticado
+    return <Outlet />;
+  } else {
+    // Redirigir al usuario a la página de inicio de sesión si no está autenticado
+    return <Navigate to="/" replace />;
+  }
+};
+
+const Landing = ({ setIsActive }) => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    Swal.fire({
+      icon: "warning",
+      title: "Activar ubicación",
+      text: "Vamos a validar su cobertura, por favor active el GPS",
+      confirmButtonText: "Activar",
+      customClass: {
+        confirmButton: "botonPopUp",
+      },
+    }).then(() => {
+      setIsActive(true);
+      navigate("cobertura");
+    });
+  });
+};
+const Cobertura = () => {
   const [longitud, setLongitud] = useState(0);
   const [latitud, setLatitud] = useState(0);
   const [coordinates, setCoordinates] = useState({});
   const [direccion, setDireccion] = useState("");
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyAjd2NH6l2xOuXkXeQ8dYa9WiSYCOYiJVg",
+    googleMapsApiKey: "AIzaSyBJUnzRS-9L6X2_nSglcAY9dCBBHo1SJgA",
   });
+  const [locationEnabled, setLocationEnabled] = useState(true);
+
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      // El navegador soporta la geolocalización
+      const watchId = navigator.geolocation.watchPosition(
+        () => {
+          setLocationEnabled(true);
+        },
+        () => {
+          setLocationEnabled(false);
+        }
+      );
+
+      // Devolver una función de limpieza para detener la vigilancia cuando el componente se desmonte
+      return () => {
+        navigator.geolocation.clearWatch(watchId);
+      };
+    } else {
+      // El navegador no soporta la geolocalización
+      setLocationEnabled(false);
+    }
+  }, []);
 
   const onLoad = (marker) => {
     // Realiza la geocodificación inversa cuando se carga el marcador
@@ -20,6 +74,7 @@ const App = () => {
       if (status === "OK") {
         if (results[0]) {
           // Obtiene la dirección aproximada
+          console.log(results);
           const direccion = results[0].formatted_address;
           setDireccion(direccion);
         } else {
@@ -39,31 +94,102 @@ const App = () => {
     }
   }, []);
 
-  useEffect(()=>{
-    if(coordinates.code== 1){
+  useEffect(() => {
+    if (coordinates.code == 1) {
       Swal.fire({
-        icon: 'success',
-        title: 'Wow...',
-        text: 'En tu direccion tenemos cobertura!',
-        footer: '<a href="https://wa.me/573176995294?text=Contratar%20servicio">Quieres contratar el servicio?</a>'
-      })
-    }else if(coordinates.code == 0){
+        icon: "success",
+        title: "Wow...",
+        text: "En tu direccion tenemos cobertura!",
+        footer:
+          '<a href="https://wa.me/573176995294?text=Contratar%20servicio">Quieres contratar el servicio?</a>',
+        customClass: {
+          confirmButton: "botonPopUp",
+        },
+      });
+    } else if (coordinates.code == 0) {
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'En este momento no tenemos cobertura en tu sector',
-        footer: '<a href="https://wa.me/573176995294?text=Asesor">Quieres hablar con un asesor?</a>'
-      })
+        icon: "error",
+        title: " ",
+        text: "No tenemos cobertura en esta ubicación",
+        footer:
+          '<a href="https://wa.me/573176995294?text=Asesor">Quieres hablar con un asesor?</a>',
+        confirmButtonText: "Solicitar Cobertura",
+        customClass: {
+          confirmButton: "botonPopUp",
+          htmlContainer: "ContainerPop",
+        },
+      });
     }
-    console.log("cobertura:"+coordinates.code);
-  },[coordinates])
+    // console.log("cobertura:" + coordinates.code);
+  }, [coordinates]);
 
+  const enableGPS = () => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        () => {
+          Swal.fire({
+            icon: "success",
+            text: "Se avtivo el GPS correctamente",
+            confirmButtonText: "Ok",
+            customClass: {
+              confirmButton: "botonPopUp",
+            },
+          }).then(() => {
+            window.location.reload();
+          });
+        },
+        () => {
+          // Ocurrió un error al obtener la posición
+          Swal.fire({
+            icon: "error",
+            text: "No se pudo activar la geolocalización en este dispositivo.",
+            confirmButtonText: "Ok",
+            customClass: {
+              confirmButton: "botonPopUp",
+            },
+          }).then(() => {
+            window.location.reload();
+          });
+        },
+        { enableHighAccuracy: true }
+      );
+    } else {
+      // El navegador no soporta la geolocalización
+      Swal.fire({
+        icon: "error",
+        text: "La geolocalización no es compatible con este navegador.",
+        confirmButtonText: "Ok",
+        customClass: {
+          confirmButton: "botonPopUp",
+        },
+      }).then(() => {
+        window.location.reload();
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (!locationEnabled) {
+      Swal.fire({
+        icon: "error",
+        title: "Para continuar...",
+        text: "Debes tener la ubicación del dispositivo activo",
+        confirmButtonText: "Activar",
+        customClass: {
+          confirmButton: "botonPopUp",
+        },
+      }).then(() => {
+        enableGPS();
+      });
+    }
+  }, [locationEnabled]);
   const validaCobertura = () => {
     if (latitud != 0 && longitud != 0) {
       const fetchData = async () => {
         try {
           const response = await fetch(
-            `https://open-rat-production.up.railway.app/api/v1/cobertura?latitud=${latitud}&longitud=${longitud}`
+            //`https://geoserver-production.up.railway.app/api/v1/cobertura?latitud=${latitud}&longitud=${longitud}`
+            `http://localhost:3000/api/v1/cobertura?latitud=${latitud}&longitud=${longitud}`
           );
           const data = await response.json();
           setCoordinates(data);
@@ -87,18 +213,15 @@ const App = () => {
   };
 
   if (!isLoaded) {
-    return <div>Loading...</div>;
+    return (
+      <div className="containerLoader">
+        <div className="loader"></div>
+      </div>
+    );
   } else if (longitud == 0 && latitud == 0) {
     return (
-      <div className="globalContainer">
-        <button className="buttonValidar" onClick={validaCobertura()}>
-          Validar cobertura
-        </button>
-        <GoogleMap
-          zoom={10}
-          center={{ lat: 44, lng: -80 }}
-          mapContainerClassName="map-container"
-        ></GoogleMap>
+      <div className="containerLoader">
+        <div className="loader"></div>
       </div>
     );
   } else {
@@ -106,12 +229,24 @@ const App = () => {
       <div className="globalContainer">
         <div className="bodyContainer">
           <div className="buttonContainer">
-            <img className="logoBitwan" src={image} alt="" />
-            <h5>Lu ubicación ontenida es: </h5>
-            <p >{direccion}</p>
-            <p className="aviso">Si quieres validar la cobertura para esta ddireccion da click en "Validar Cobertura"</p>
-            <button className="buttonValidar" onClick={()=>validaCobertura()}>
-              Validar cobertura
+            <div className="header">
+              <img className="logoBitwan" src={image} alt="" />
+              <h1 className="titulo">Valida tu cobertura</h1>
+            </div>
+            <div className="containerUbicacion">
+              <img className="imgUbicacion" src={ubicacion} alt="" />
+              <div className="containerInfoDireccion">
+                <h5>Tu ubicación es: </h5>
+                <p>{direccion}</p>
+              </div>
+            </div>
+            {/* <p className="aviso">
+              Si quieres validar la cobertura para esta dirección da click en
+              "Validar Cobertura"
+            </p> */}
+            <button className="buttonValidar" onClick={() => validaCobertura()}>
+              Validar cobertura{" "}
+              <img className="imgAntena" src={antena} alt="" />
             </button>
           </div>
           <div className="containerGeneralMap">
@@ -132,4 +267,20 @@ const App = () => {
   }
 };
 
+const App = () => {
+  const [isActive, setIsActive] = useState(false);
+  return (
+    <div>
+      <Routes>
+        <Route path="/" element={<Landing setIsActive={setIsActive} />} />
+        <Route
+          path="/cobertura"
+          element={<ProtectedRoute isActive={isActive} />}
+        >
+          <Route index element={<Cobertura />} />
+        </Route>
+      </Routes>
+    </div>
+  );
+};
 export default App;

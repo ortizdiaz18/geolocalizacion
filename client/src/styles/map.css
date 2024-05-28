@@ -1,65 +1,408 @@
 
-.globalContainer{
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
+.containerLoader {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.headerContainer{
-    width: 100%;
-    height: 20vh;
-    background-color: rgb(237,237,237);
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    
+
+.loader {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  animation: spin 1.2s linear infinite;
 }
-.logoBitwan{
-   height: 10%;
-   margin-top: 20%;
-   
+.loader::before,
+.loader::after {
+  content: "";
+  position: absolute;
+  border-radius: inherit;
 }
-.tituloPrincipal{
-    margin-right: 15%;
+
+.loader::before {
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(0deg, #ededed, #4296ef);
 }
-.bodyContainer{
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    
+.loader::after {
+  width: 85%;
+  height: 85%;
+  background-color: white;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
-.buttonContainer{
-    display: flex;
-    flex-direction: column;
-    width: 20%;
-    align-items: center;
-    box-shadow: 33px 0px 45px -39px rgba(0,0,0,0.75);
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
-.containerGeneralMap{
-    width: 80%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: end;
+
+.swal2-confirm {
+  background-color: #4296ef !important;
+  color: white;
 }
-.map-container{
-    width: 99%;
-    height: 100%;
+
+
+.globalContainer {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
 }
-.buttonValidar{
-    width: 80%;
-    height: 10%;
-    background-color: rgb(67,151,240);
-    color: white;
-    margin-top: 20%;
+.headerContainer {
+  width: 100%;
+  height: 20vh;
+  background-color: rgb(237, 237, 237);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
-p{
-    width: 90%;
+.botonPopUp {
+  background-color: rgb(67, 151, 240);
+  color: white;
 }
-.aviso{
-    font-size: small;
-    font-weight: bold;
-    text-align: center;
-    margin-top: 20%;
+.logoBitwan {
+    margin-right: 8%;
+  height: 75%;
+  /* margin: 5% 0 0 5%; */
 }
+.tituloPrincipal {
+  margin-right: 15%;
+}
+.bodyContainer {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+}
+.header {
+  width: 100%;
+  height: 7vh;
+  background-color: rgb(237, 237, 237);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.titulo {
+  color: rgb(140, 139, 139);
+  font-size: 30px;
+  /* width: 35%; */
+  text-align: left;
+  margin-right: 15%;
+}
+.imgEncabezado {
+  width: 50%;
+}
+.imgUbicacion {
+  width: 12%;
+}
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  box-shadow: 33px 0px 45px -39px rgba(0, 0, 0, 0.75);
+}
+.containerGeneralMap {
+  width: 0%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: end;
+}
+.map-container {
+  width: 99%;
+  height: 100%;
+}
+.buttonValidar {
+  width: 15%;
+  height: 10%;
+  background-color: rgb(67, 151, 240);
+  color: white;
+  margin-top: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  font-size: 20px;
+  margin-bottom: 5%;
+}
+.imgAntena {
+  width: 20%;
+}
+p {
+  width: 90%;
+  margin-top: 2%;
+  color: black;
+}
+h5 {
+  color: black;
+}
+.aviso {
+  font-size: small;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 2%;
+  color: black;
+}
+.containerUbicacion{
+  display: flex;
+  flex-direction: row;
+  margin-top: 5%;
+  justify-content: center;
+}
+.containerInfoDireccion{
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  padding-left: 5%;
+  width: 50%;
+}
+.ContainerPop{
+  font-weight: bold !important;
+}
+@media(max-width: 1250px){
+    .globalContainer {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+      }
+      .headerContainer {
+        width: 100%;
+        height: 20vh;
+        background-color: rgb(237, 237, 237);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      }
+      .botonPopUp {
+        background-color: rgb(67, 151, 240);
+        color: white;
+      }
+      .logoBitwan {
+          margin-right: 0;
+        height: 75%;
+        /* margin: 5% 0 0 5%; */
+      }
+      .tituloPrincipal {
+        margin-right: 15%;
+      }
+      .bodyContainer {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+      }
+      .header {
+        width: 100%;
+        height: 10vh;
+        background-color: rgb(237, 237, 237);
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+      }
+      .titulo {
+        color: rgb(140, 139, 139);
+        /* font-size: 30px;
+        width: 35%; */
+        text-align: left;
+        margin-right: none;
+      
+      }
+      .imgEncabezado {
+        width: 60%;
+      }
+      .imgUbicacion {
+        width: 5%;
+      }
+      .buttonContainer {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+        box-shadow: 33px 0px 45px -39px rgba(0, 0, 0, 0.75);
+        /* justify-content: center; */
+      }
+      .containerGeneralMap {
+        width: 0%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: end;
+      }
+      .map-container {
+        width: 99%;
+        height: 100%;
+      }
+      .buttonValidar {
+        width: 20%;
+        height: 10%;
+        background-color: rgb(67, 151, 240);
+        color: white;
+        margin-top: 0%;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        font-size: 20px;
+        margin-bottom: 5%;
+      }
+      .imgAntena {
+        width: 20%;
+      }
+      p {
+        width: 90%;
+        text-align: left;
+        color: black;
+        margin-top: 1%;
+      }
+      h5 {
+        color: black;
+      }
+      .aviso {
+        font-size: small;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 1%;
+        color: black;
+      }
+      .containerUbicacion{
+        display: flex;
+        flex-direction: row;
+        margin-top: 5%;
+        justify-content: center;
+      }
+      .containerInfoDireccion{
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        padding-left: 5%;
+        width: 80%;
+      }
+}
+
+@media (max-width: 480px) {
+    .globalContainer {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: white;
+    }
+    .headerContainer {
+      width: 100%;
+      height: 20vh;
+      background-color: rgb(237, 237, 237);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+    .botonPopUp {
+      background-color: rgb(67, 151, 240);
+      color: white;
+    }
+    .logoBitwan {
+      height: 60%;
+      /* margin: 5% 0 0 5%; */
+    }
+    .tituloPrincipal {
+      margin-right: 15%;
+    }
+    .bodyContainer {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+    }
+    .header {
+      width: 100%;
+      background-color: rgb(237, 237, 237);
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+      align-items: center;
+    }
+    .titulo {
+      color: rgb(140, 139, 139);
+      font-size: 20px;
+      width: 50%;
+      text-align: center;
+    }
+    .imgEncabezado {
+      width: 100%;
+    }
+    .imgUbicacion {
+      height: 60%;
+      width: auto;
+     padding-left: 10%;
+    }
+    .buttonContainer {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      align-items: center;
+      box-shadow: 33px 0px 45px -39px rgba(0, 0, 0, 0.75);
+    }
+    .containerGeneralMap {
+      width: 0%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: end;
+    }
+    .map-container {
+      width: 99%;
+      height: 100%;
+    }
+    .buttonValidar {
+      width: 80%;
+      height: 10%;
+      background-color: rgb(67, 151, 240);
+      color: white;
+      margin-top: 30%;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      font-size: 20px;
+    }
+    .imgAntena {
+      width: 20%;
+    }
+    p {
+      width: 90%;
+      text-align: left;
+      /* margin-top: 10%; */
+      color: black;
+      font-size: 80%;
+    }
+    h5 {
+      color: black;
+    }
+    .aviso {
+      font-size: small;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 10%;
+      color: black;
+    }
+    .containerInfoDireccion{
+      display: flex;
+      flex-direction: column;
+      justify-content: left;
+      padding-left: 5%;
+      width: 70%;
+    }
+    .containerUbicacion{
+      display: flex;
+      flex-direction: row;
+      margin-top: 25%;
+      justify-content: center;
+      height: 20%;
+      align-items: center;
+    }
+  }

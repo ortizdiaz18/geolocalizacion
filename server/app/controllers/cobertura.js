@@ -1,12 +1,12 @@
 const fs = require("fs");
 const { parseString } = require("xml2js");
-const path = require('path');
+const path = require("path");
 
 const validarCobertura = async (req, res) => {
   const { longitud, latitud } = req.query;
   const coordinatesArray = [];
   // Ruta del archivo KML
-  const kmlPath = path.join(__dirname,"COBERTURA.kml");
+  const kmlPath = path.join(__dirname, "COBERTURA.kml");
 
   // Leer el archivo KML
   const kmlData = fs.readFileSync(kmlPath, "utf8");
@@ -49,7 +49,7 @@ const validarCobertura = async (req, res) => {
         .json({ code: "1", msg: "La ubicación actual tiene cobertura" });
     } else {
       res
-        .status(400)
+        .status(200)
         .json({ code: "0", msg: "La ubicación actual NO tiene cobertura" });
     }
   }
